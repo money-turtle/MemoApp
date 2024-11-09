@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity} from 'react-native'
+import { Link } from 'expo-router'
 import Icon from './icon'
 interface Props {
     children: string
@@ -9,15 +10,17 @@ interface Props {
 const MemoListItem = (props: Props): JSX.Element => {
     const {children, memoListItemTitle, memoListItemDate} = props
     return(
-        <View style={styles.memoListItem}>
-            <View>
-                <Text style={styles.memoListItemTitle}>{memoListItemTitle}</Text>
-                <Text style={styles.memoListItemDate}>{memoListItemDate}</Text>
-            </View>
-            <TouchableOpacity>
-                <Icon name='delete' size={40} color='#B0B0B0' />
+        <Link href='/memo/detail' asChild>
+            <TouchableOpacity style={styles.memoListItem}>
+                <View>
+                    <Text style={styles.memoListItemTitle}>{memoListItemTitle}</Text>
+                    <Text style={styles.memoListItemDate}>{memoListItemDate}</Text>
+                </View>
+                <TouchableOpacity>
+                    <Icon name='delete' size={40} color='#B0B0B0' />
+                </TouchableOpacity>
             </TouchableOpacity>
-        </View>
+        </Link>
 
     )
 
