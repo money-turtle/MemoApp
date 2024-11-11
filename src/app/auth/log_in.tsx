@@ -13,6 +13,7 @@ const handlePress = (): void => {
 
 const Login = (): JSX.Element => {
     const [email, setEmail] = useState('')//分割代入の一種
+    const [password, setPassword] = useState('')//分割代入の一種
     return (
         <View style={styles.container}>
             <View style={styles.inner}>
@@ -21,8 +22,20 @@ const Login = (): JSX.Element => {
                     style={styles.input} 
                     value={email} 
                     onChangeText={(text) => { setEmail(text) }}
+                    autoCapitalize='none'
+                    keyboardType='email-address'
+                    placeholder='Email Address'
+                    textContentType='emailAddress'
                 />
-                <TextInput style={styles.input} value='Password' />
+                <TextInput
+                    style={styles.input} 
+                    value={password} 
+                    onChangeText={(text) => { setPassword(text) }}
+                    autoCapitalize='none'//最初の入力文字を小文字に
+                    secureTextEntry//伏せ字
+                    placeholder='Password'//空白時の入力文字列。薄く表示される。
+                    textContentType='password'//キーチェーンにPWが入っているとそれを使える
+                />
                 <Button label='Submit' onPress={handlePress} />
                 
                 <View style={styles.footer}>
