@@ -30,6 +30,8 @@ yarn-error.*
 
 # local env files
 .env*.local
+.env 
+# firebaseの設定値をgitignoreに追記して第三者に見えないようにする。
 
 # typescript
 *.tsbuildinfo
