@@ -12,7 +12,7 @@ const handlePress = (): void => {
 
 const List = (): JSX.Element => {
     const navigation = useNavigation()//expo-routerによって提供されているhook。reactコンポーネントの直下に置かないといけない。関数内はNG。
-    useEffect(() => {//下記の関数が1度だけ描画するようにする。
+    useEffect(() => {//下記の関数が1度だけ描画するようにする。//このコンポーネントは関係ないとこに影響を与える。
         navigation.setOptions({
             headerRight: () => { return <LogOutButton /> }
         })    

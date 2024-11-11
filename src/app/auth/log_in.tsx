@@ -3,6 +3,7 @@ import {
 } from 'react-native'
 import Button from '../../components/Button'
 import { Link, router } from 'expo-router'
+import { useState } from 'react'
 
 const handlePress = (): void => {
     //ログイン
@@ -11,11 +12,16 @@ const handlePress = (): void => {
 }
 
 const Login = (): JSX.Element => {
+    const [email, setEmail] = useState('')//分割代入の一種
     return (
         <View style={styles.container}>
             <View style={styles.inner}>
                 <Text style={styles.title}>Log In</Text>
-                <TextInput style={styles.input} value='Email Adress' />
+                <TextInput
+                    style={styles.input} 
+                    value={email} 
+                    onChangeText={(text) => { setEmail(text) }}
+                />
                 <TextInput style={styles.input} value='Password' />
                 <Button label='Submit' onPress={handlePress} />
                 
