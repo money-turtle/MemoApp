@@ -1,13 +1,24 @@
 import { 
-    View, Text, StyleSheet, TextInput, TouchableOpacity
+    View, Text, StyleSheet, TextInput, TouchableOpacity, Alert
 } from 'react-native'
 import Button from '../../components/Button'
 import { Link, router } from 'expo-router'
 import { useState } from 'react'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../../config'
 
-const handlePress = (): void => {
+const handlePress = (email: string, password: string): void => {
     //ログイン
-    router.replace('/memo/list')//pushというのは画面遷移の履歴にこちらの指定した画面を追加するという関数
+    signInWithEmailAndPassword(auth, email, password)
+     .then((userCredential) => {
+        console.log(userCredential.user.uid)
+        router.replace('/memo/list')//pushというのは画面遷移の履歴にこちらの指定した画面を追加するという関数
+     })
+     .catch((error) => {
+        const { code, message } = error
+        console.log(code, message)
+        Alert.alert(message)
+     })
 
 }
 
@@ -36,11 +47,11 @@ const Login = (): JSX.Element => {
                     placeholder='Password'//空白時の入力文字列。薄く表示される。
                     textContentType='password'//キーチェーンにPWが入っているとそれを使える
                 />
-                <Button label='Submit' onPress={handlePress} />
+                <Button label='Submit' onPress={() => { handlePress(email, password) } } />
                 
                 <View style={styles.footer}>
                     <Text style={styles.footerText}>Not registered?</Text>
-                    <Link href='/auth/sign_up' asChild>
+                    <Link href='/auth/sign_up' asChild replace>
                         <TouchableOpacity>
                             <Text style={styles.footerLink}>Sign up here!</Text>
                         </TouchableOpacity>

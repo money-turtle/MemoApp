@@ -1,22 +1,49 @@
-import { View, Text, StyleSheet, TouchableOpacity} from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native'
 import { Link } from 'expo-router'
 import Icon from './icon'
+import { type Memo } from '../../types/memo'
+import { deleteDoc, doc } from 'firebase/firestore'
+import { auth, db } from '../config'
+
 interface Props {
-    children: string
-    memoListItemTitle: string
-    memoListItemDate: string
+    memo: Memo
 }
 
-const MemoListItem = (props: Props): JSX.Element => {
-    const {children, memoListItemTitle, memoListItemDate} = props
+const handlePress = (id: string): void => {
+    if (auth.currentUser === null) { return }
+    const ref = doc(db, `users/${auth.currentUser.uid}/memos`, id)
+    Alert.alert('メモを削除します', '宜しいですか？', [
+        {
+            text: 'キャンセル'
+        },
+        {
+            text: '削除する',
+            style: 'destructive',
+            onPress: () => {
+                deleteDoc(ref)
+                 .catch(() => { Alert.alert('削除に失敗しました') })
+            }
+        }
+    ])
+
+}
+
+const MemoListItem = (props: Props): JSX.Element | null => {
+    const { memo } = props
+    const { id, bodyText, updatedAt } = memo
+    if (bodyText === null || updatedAt === null ) { return null } 
+    const dateString = updatedAt.toDate().toLocaleString('ja-JP')
     return(
-        <Link href='/memo/detail' asChild>
+        <Link
+         href={{pathname: 'memo/detail', params: { id: memo.id }}} 
+         asChild
+        >
             <TouchableOpacity style={styles.memoListItem}>
                 <View>
-                    <Text style={styles.memoListItemTitle}>{memoListItemTitle}</Text>
-                    <Text style={styles.memoListItemDate}>{memoListItemDate}</Text>
+                    <Text numberOfLines={1} style={styles.memoListItemTitle}>{memo.bodyText}</Text>
+                    <Text style={styles.memoListItemDate}>{dateString}</Text>
                 </View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => { handlePress(memo.id) }}>
                     <Icon name='delete' size={40} color='#B0B0B0' />
                 </TouchableOpacity>
             </TouchableOpacity>
